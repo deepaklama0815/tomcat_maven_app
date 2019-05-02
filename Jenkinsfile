@@ -33,7 +33,7 @@ pipeline{
         }
         stage('build'){
             agent{
-                maven{
+                dockerfile{
                     filename 'Dockerfile-project'
                     label 'maven'
                 }
