@@ -19,7 +19,7 @@ node('docker'){
         }
     }
     
-    stage('Deploy'){
+    stage('Deployy'){
         sh """
             docker run -d -p 8081:8080 $tomcat_repo:$BUILD_ID
             docker run -d -p 8082:8080 $tomcat_repo:$BUILD_ID
