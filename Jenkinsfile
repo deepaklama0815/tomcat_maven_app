@@ -15,7 +15,7 @@ pipeline{
     stages{
         stage('Junit'){
             agent{
-                maven{
+                docker{
                     image 'maven:3.6.1-jdk-8'
                     label 'maven'
                 }
