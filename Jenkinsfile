@@ -33,7 +33,7 @@ pipeline{
         }
         stage('build'){
             agent{
-                maven{
+                docker{
                     filename 'Dockerfile-project'
                     label 'maven'
                 }
@@ -50,7 +50,7 @@ pipeline{
                 stage('packaging'){
                     steps{
                         sh 'mvn deploy --settings settings.xml -DSkipTests=True'
-                        stash inclides: "target/${ARTIFACT_NAME}.war", name: 'artifact'
+                        stash includes: "target/${ARTIFACT_NAME}.war", name: 'artifact'
                     }
                     post{
                         success{
