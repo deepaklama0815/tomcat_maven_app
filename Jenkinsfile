@@ -25,7 +25,7 @@ pipeline{
             }
             post{
                 success{
-                    // junit "target/surefire-reports/*.xml"
+                    junit "target/surefire-reports/*.xml"
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/site', reportFiles: 'surefire-report.html', reportName: 'SureFireReportHTML', reportTitles: ''])
 
                 }
@@ -49,7 +49,7 @@ pipeline{
                 }
                 stage('packaging'){
                     steps{
-                        sh 'mvn test verify' // --settings settings.xml -DSkipTests=True'
+                        sh 'mvn deploy --settings settings.xml -DSkipTests=True'
                         // stash includes: "target/${ARTIFACT_NAME}.war", name: 'artifact'
                     }
                     post{
