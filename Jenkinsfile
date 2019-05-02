@@ -3,7 +3,7 @@ pipeline{
 
     environment{
         VM_USER = "ec2-user"
-        VM_SERVER = "100.26.189.97" //target public ip
+        VM_SERVER = "172.31.81.98" //target public ip
         TAG = "joedeep09/tomcat"  //docker hub repo
         PORT = 8080
 
@@ -21,11 +21,11 @@ pipeline{
                 }
             }
             steps{
-                sh 'mvn --settings settings.xml test verify surefire-report:report-only'
+                sh 'mvn test verify' // --settings settings.xml test verify surefire-report:report-only'
             }
             post{
                 success{
-                    junit "target/surefire-reports/*.xml"
+                   // junit "target/surefire-reports/*.xml"
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/site', reportFiles: 'surefire-report.html', reportName: 'SureFireReportHTML', reportTitles: ''])
 
                 }
@@ -42,7 +42,7 @@ pipeline{
                 stage('read the POM'){
                     steps{
                         script{
-                            pom = readmavenPom file: 'pom.xml'
+                            pom = readMavenPom file: 'pom.xml'
                             ARTIFACT_NAME = pom.artifactId.toString()
                         }
                     }
