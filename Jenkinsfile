@@ -26,6 +26,37 @@ pipeline{
             post{
                 success{
                     junit "target/surefire-reports/*.xml"
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/site', reportFiles: 'surefire-report.html', reportName: 'SureFireReportHTML', reportTitles: ''])
+
+                }
+            }
+        }
+        stage('build'){
+            agent{
+                maven{
+                    filename 'Dockerfile-project'
+                    label 'maven'
+                }
+            }
+            stages{
+                stage('read the POM'){
+                    steps{
+                        script{
+                            pom = readmavenPom file: 'pom.xml'
+                            ARTIFACT_NAME = pom.artifactId.toString()
+                        }
+                    }
+                }
+                stage('packaging'){
+                    steps{
+                        sh 'mvn deploy --settings settings.xml -DSkipTests=True'
+                        stash inclides: "target/${ARTIFACT_NAME}.war", name: 'artifact'
+                    }
+                    post{
+                        success{
+                            echo "Package has been uploaded to artifactory successfully"
+                        }
+                    }
                 }
             }
         }
